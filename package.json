@@ -1,0 +1,15 @@
+{
+  "name": "promql2logql",
+  "version": "1.0.0",
+  "description": "Basic PromQL to LogQL transpiler for qryn",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "AGPLv3",
+  "dependencies": {
+    "jsonic": "^1.0.1",
+    "squirrelly": "^8.0.8"
+  }
+}
