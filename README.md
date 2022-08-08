@@ -17,5 +17,5 @@ rate(foo{"bar"="baz")[5m]) by (x,y)
 ```
 Output:
 ```
-rate({"__name__"="foo", "bar"="baz"}[300s]) by (x,y)
+rate({"__name__"="foo", "bar"="baz"} | unwrap_value [300s]) by (x,y)
 ```
