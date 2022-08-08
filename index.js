@@ -22,7 +22,7 @@ const convert = function(data){
 
 const getTemplate = function(data){
   var template = '';
-  if (data.range){ 
+  if (data.range||date.args){ 
     /* range aggregation query */
     template += '{{ it.name }}({{@each(it.args) => arg}}{"__name__"="{{arg.name}}"{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}, "{{tag.name}}"="{{tag.value}}"{{/each}}{{/if}}}[{{ arg.range }}]{{/each}}){{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
   } else {
@@ -32,3 +32,6 @@ const getTemplate = function(data){
   return template;
 }
 
+module.exports = {
+    p2l: convert
+};
