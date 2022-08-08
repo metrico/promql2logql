@@ -1,6 +1,6 @@
 {
-  "name": "promql2logql",
-  "version": "1.0.0",
+  "name": "@qxip/promql2logql",
+  "version": "1.0.1",
   "description": "Basic PromQL to LogQL transpiler for qryn",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "",
   "license": "AGPLv3",
   "dependencies": {
+    "@qxip/promql-parser-js": "^0.1.1",
     "jsonic": "^1.0.1",
     "squirrelly": "^8.0.8"
   }
