@@ -1,5 +1,5 @@
 # prom2logql
-PromQL to LogQL template based transpiler
+PromQL to LogQL template based transpiler for [qryn](https://metrico.in)
 
 ### Status
 * Experimental! Do not use it.
