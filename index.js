@@ -32,14 +32,27 @@ const convert = function(data){
 	var logql = Sqrl.render(getTemplate(data), data)
 	return logql;
   } catch(e) {
-	console.log(e, data);
+	console.log(e, JSON.stringify(data));
 	return;
   }
 }
 
 const getTemplate = function(data){
   var template = '';
-  if (data.range||data.args && data.args[0].args){
+  if (data.args && data.args[0].args && data.args[0].args[0] && data.args[0].args[0].args){
+    /* triple aggregation query */
+    template += '{{ it.name }}({{@each(it.args) => it}}'
+      template += '{{ it.name }}({{@each(it.args) => it}}'
+      template += '{{ it.name }}({{@each(it.args) => arg}}{'
+      template += '__name__="{{arg.name}}"'
+      template += '{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}'
+	template += ', {{tag.name}}'
+        template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op == "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
+	template += '"{{tag.value}}"{{/each}}{{/if}}} | unwrap_value [{{ arg.range }}]{{/each}})'
+    template += '{{/each}})'
+    template += '{{/each}})'
+    template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{#else}} by (__name__){{/if}}'
+  } else if (data.range||data.args && data.args[0].args){
     /* double aggregation query */
     template += '{{ it.name }}({{@each(it.args) => it}}'
       template += '{{ it.name }}({{@each(it.args) => arg}}{'

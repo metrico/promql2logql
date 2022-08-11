@@ -54,3 +54,12 @@ try {
 } catch(e) {
   console.log(e);
 }
+
+var promql_3way = 'avg(sum by(le) (rate(traces_service_graph_request_failed_total[1m])))'
+
+try {
+  var logql = p2l(promql_3way)
+  console.log(logql);
+} catch(e) {
+  console.log(e);
+}
