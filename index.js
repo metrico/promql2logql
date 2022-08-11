@@ -26,15 +26,23 @@ const getTemplate = function(data){
   if (data.range||data.args && data.args[0].args){
     /* double aggregation query */
     template += '{{ it.name }}({{@each(it.args) => it}}'
-    template += '{{ it.name }}({{@each(it.args) => arg}}{__name__="{{arg.name}}"{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}, {{tag.name}}="{{tag.value}}"{{/each}}{{/if}}} | unrwap_value [{{ arg.range }}]{{/each}})'
+      template += '{{ it.name }}({{@each(it.args) => arg}}{'
+      template += '__name__="{{arg.name}}"'
+      template += '{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}, {{tag.name}}="{{tag.value}}"{{/each}}{{/if}}} | unrwap_value [{{ arg.range }}]{{/each}})'
     template += '{{/each}}'
     template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
   } else if (data.range||data.args){
     /* range aggregation query */
-    template += '{{ it.name }}({{@each(it.args) => arg}}{__name__="{{arg.name}}"{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}, {{tag.name}}="{{tag.value}}"{{/each}}{{/if}}} | unwrap_value [{{ arg.range }}]{{/each}}){{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
+    template += '{{ it.name }}({{@each(it.args) => arg}}\{ '
+      template += '{{@if(arg.name !== "")}}__name__="{{arg.name}}"{{#else}}__name__!=""{{/if}}'
+      template += '{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}'
+      template += ', {{tag.name}}="{{tag.value}}"{{/each}}{{/if}}}'
+      template += ' | unwrap_value [{{ arg.range }}]'
+    template += '{{/each}})'
+    template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
   } else {
     /* fallback selector */
-    template += '{__name__:"{{ it.name }}"}'
+    template += 'rate({__name__:"{{ it.name }}"} | unwrap_value [1s])'
   }
   return template;
 }

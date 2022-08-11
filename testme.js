@@ -18,10 +18,20 @@ try {
   console.log(e);
 }
 
-var promql_odd = 'rate(http_requests_total[5m])[30m:1m]'
+//var promql_odd = 'rate(http_requests_total[5m])[30m:1m]'
+var promql_odd = 'rate({some="tag"}[5m])'
 
 try {
   var logql = p2l(promql_odd)
+  console.log(logql);
+} catch(e) {
+  console.log(e);
+}
+
+var promql_noname = 'just_some_name{}'
+
+try {
+  var logql = p2l(promql_noname)
   console.log(logql);
 } catch(e) {
   console.log(e);
