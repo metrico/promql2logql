@@ -1,6 +1,10 @@
 {
   "name": "@qxip/promql2logql",
+<<<<<<< HEAD
   "version": "1.0.6",
+=======
+  "version": "1.0.5",
+>>>>>>> 1ce12ab3db3ab76e4a2a4e8dd9e94a72f1d4acb0
   "description": "Basic PromQL to LogQL transpiler for qryn",
   "main": "index.js",
   "scripts": {
