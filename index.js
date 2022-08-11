@@ -47,9 +47,9 @@ const getTemplate = function(data){
       template += '{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}'
 	template += ', {{tag.name}}'
         template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op == "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
-	template += '"{{tag.value}}"{{/each}}{{/if}}} | unrwap_value [{{ arg.range }}]{{/each}})'
-    template += '{{/each}}'
-    template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
+	template += '"{{tag.value}}"{{/each}}{{/if}}} | unwrap_value [{{ arg.range }}]{{/each}})'
+    template += '{{/each}})'
+    template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{#else}} by (__name__){{/if}}'
   } else if (data.range||data.args){
     /* range aggregation query */
     template += '{{ it.name }}({{@each(it.args) => arg}}\{ '

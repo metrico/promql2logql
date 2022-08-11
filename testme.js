@@ -45,3 +45,12 @@ try {
 } catch(e) {
   console.log(e);
 }
+
+var promql_sumrate = 'sum(rate(traces_service_graph_request_failed_total{}[1m]))'
+
+try {
+  var logql = p2l(promql_sumrate)
+  console.log(logql);
+} catch(e) {
+  console.log(e);
+}
