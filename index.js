@@ -9,6 +9,22 @@ const Sqrl = require('squirrelly');
 const jsonic = require('jsonic');
 const { promql_parse } = require("@qxip/promql-parser-js");
 
+const getOp = function(op){
+  const ops = {
+    "GreaterEqual":  ">=",
+    "LossEqual":  "<=",
+    "NotEqual":  "!=",
+    "Equal":  "==",
+    "GreaterThan":  ">",
+    "LessThan":  "<"
+  }
+  return ops[op] || '=';
+}
+
+/*
+'{{ @if (tag.op === "GreaterEqual") }}>={{ #elif (tag.op === "LessEqual") }}<={{ #elif (tag.op === "NotEqual") }}!={{ #elif (tag.op === "Equal") }}={{ #elif (tag.op === "GreaterThan") }}>{{ #elif (tag.op === "LessThan") }}<{{ #else }}={{ /if}}`
+*/
+
 const convert = function(data){
   if (!data||data.length==0) return;
   try {
@@ -28,7 +44,10 @@ const getTemplate = function(data){
     template += '{{ it.name }}({{@each(it.args) => it}}'
       template += '{{ it.name }}({{@each(it.args) => arg}}{'
       template += '__name__="{{arg.name}}"'
-      template += '{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}, {{tag.name}}="{{tag.value}}"{{/each}}{{/if}}} | unrwap_value [{{ arg.range }}]{{/each}})'
+      template += '{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}'
+	template += ', {{tag.name}}'
+        template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op == "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
+	template += '"{{tag.value}}"{{/each}}{{/if}}} | unrwap_value [{{ arg.range }}]{{/each}})'
     template += '{{/each}}'
     template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
   } else if (data.range||data.args){
@@ -36,13 +55,16 @@ const getTemplate = function(data){
     template += '{{ it.name }}({{@each(it.args) => arg}}\{ '
       template += '{{@if(arg.name !== "")}}__name__="{{arg.name}}"{{#else}}__name__!=""{{/if}}'
       template += '{{@if(arg.label_matchers !== null )}}{{@each(arg.label_matchers) => tag}}'
-      template += ', {{tag.name}}="{{tag.value}}"{{/each}}{{/if}}}'
+      template += ', {{tag.name}}'
+	// template += '{{! console.log("!!!!",tag.op) }}'
+        template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
+      template += '"{{tag.value}}"{{/each}}{{/if}}}'
       template += ' | unwrap_value [{{ arg.range }}]'
     template += '{{/each}})'
     template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
   } else {
     /* fallback selector */
-    template += 'rate({__name__:"{{ it.name }}"} | unwrap_value [1s])'
+    template += 'rate({__name__="{{ it.name }}"} | unwrap_value [1s])'
   }
   return template;
 }

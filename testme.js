@@ -19,7 +19,7 @@ try {
 }
 
 //var promql_odd = 'rate(http_requests_total[5m])[30m:1m]'
-var promql_odd = 'rate({some="tag"}[5m])'
+var promql_odd = 'rate({some="tag", some!="not"}[5m])'
 
 try {
   var logql = p2l(promql_odd)
