@@ -63,7 +63,7 @@ const getTemplate = function(data){
     template += '{{/each}})'
     template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
   } else if (!data.name && data.label_matchers[0]){
-      template += 'rate({ '
+      template += 'first_over_time({ '
       template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
       template += '{{tag.name}}'
         template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
