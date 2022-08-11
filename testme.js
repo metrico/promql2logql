@@ -36,3 +36,12 @@ try {
 } catch(e) {
   console.log(e);
 }
+
+var promql_le = '{le="300"}'
+
+try {
+  var logql = p2l(promql_le)
+  console.log(logql);
+} catch(e) {
+  console.log(e);
+}
