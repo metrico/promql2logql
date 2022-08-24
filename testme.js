@@ -63,3 +63,22 @@ try {
 } catch(e) {
   console.log(e);
 }
+
+
+var promql_histo = 'histogram_quantile(0.95, sum(rate(traces_service_graph_request_server_seconds_bucket{}[1m])) by (le))'
+try {
+  var logql = p2l(promql_histo)
+  console.log(logql);
+} catch(e) {
+  console.log(e);
+}
+
+
+var promql_tag_le = 'something{le="300"}'
+
+try {
+  var logql = p2l(promql_tag_le)
+  console.log(logql);
+} catch(e) {
+  console.log('!!!',e);
+}

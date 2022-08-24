@@ -27,9 +27,29 @@ const getOp = function(op){
 
 const convert = function(data){
   if (!data||data.length==0) return;
+  var inner = false;
+
+  if (data.trim().startsWith('histogram_quantile')){
+    try {
+      const regex = /histogram_quantile\((.*),\s+(.*)\)/gm;
+      inner = regex.exec(data);
+      inner[0] = 'quantile_over_time';
+      if (inner[2] && inner[1]){
+        data = inner[2];
+      }
+      console.log('subquery', inner[2]);
+    } catch(e) {
+      console.log(e);
+      return;
+    }
+  }
+
   try {
 	data = jsonic(promql_parse(data));
 	var logql = Sqrl.render(getTemplate(data), data)
+        if(inner){
+          logql = `${inner[0]}(${inner[1]}, ${logql})`
+        }
 	return logql;
   } catch(e) {
 	console.log(e, JSON.stringify(data));
@@ -79,6 +99,13 @@ const getTemplate = function(data){
       template += 'first_over_time({ '
       template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
       template += '{{tag.name}}'
+        template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
+      template += '"{{tag.value}}"{{/each}}{{/if}}}'
+      template += ' | unwrap_value [1s])'
+  } else if (data.name && data.label_matchers[0]){
+      template += 'first_over_time({ __name__="{{it.name}}"'
+      template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
+      template += ', {{tag.name}}'
         template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
       template += '"{{tag.value}}"{{/each}}{{/if}}}'
       template += ' | unwrap_value [1s])'
