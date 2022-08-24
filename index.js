@@ -96,14 +96,14 @@ const getTemplate = function(data){
     template += '{{/each}})'
     template += '{{@if(it.aggregation !== false)}} by ({{it.aggregation.labels}}){{/if}}'
   } else if (!data.name && data.label_matchers[0]){
-      template += 'first_over_time({ '
+      template += 'first_over_time({__name__=~".*"'
       template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
       template += '{{tag.name}}'
-        template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
+        template += ', {{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
       template += '"{{tag.value}}"{{/each}}{{/if}}}'
       template += ' | unwrap_value [1s])'
   } else if (data.name && data.label_matchers[0]){
-      template += 'first_over_time({ __name__="{{it.name}}"'
+      template += 'first_over_time({__name__="{{it.name}}"'
       template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
       template += ', {{tag.name}}'
         template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
@@ -134,13 +134,13 @@ const labels = function(data){
 const getTemplateLabels = function(data){
   var template = '';
   if (!data.name && data.label_matchers[0]){
-      template += '{ '
+      template += '{__name__=~".*"'
       template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
-      template += '{{tag.name}}'
+      template += ', {{tag.name}}'
         template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
       template += '"{{tag.value}}"{{/each}}{{/if}}}'
   } else if (data.name && data.label_matchers[0]){
-      template += '{__name__="{{it.name}}"'
+      template += '{__name__=~".*"'
       template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
       template += ', {{tag.name}}'
         template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'

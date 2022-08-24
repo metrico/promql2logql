@@ -102,3 +102,10 @@ try {
   console.log('!!!',e);
 }
 
+var promql_labels3 = '{le="300", funk="ytown"}'
+try {
+  var logql = prom2labels(promql_labels3)
+  console.log(logql);
+} catch(e) {
+  console.log('!!!',e);
+}
