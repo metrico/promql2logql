@@ -1,4 +1,4 @@
-const { p2l } = require('./');
+const { p2l, prom2labels } = require('./');
 
 var promql = 'rate(foo{bar="baz"}[5m]) by (x,y)'
 
@@ -82,3 +82,23 @@ try {
 } catch(e) {
   console.log('!!!',e);
 }
+
+
+/* labels */
+
+var promql_labels1 = 'something{le="300"}'
+try {
+  var logql = prom2labels(promql_labels1)
+  console.log(logql);
+} catch(e) {
+  console.log('!!!',e);
+}
+
+var promql_labels2 = 'something'
+try {
+  var logql = prom2labels(promql_labels2)
+  console.log(logql);
+} catch(e) {
+  console.log('!!!',e);
+}
+

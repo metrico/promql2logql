@@ -111,12 +111,50 @@ const getTemplate = function(data){
       template += ' | unwrap_value [1s])'
   } else {
     /* fallback selector */
-    console.log(JSON.stringify(data));
+    // console.log(JSON.stringify(data));
     template += 'rate({__name__="{{ it.name }}"} | unwrap_value [1s])'
   }
   return template;
 }
 
+const labels = function(data){
+  if (!data||data.length==0) return;
+  var inner = false;
+  try {
+	data = jsonic(promql_parse(data));
+	var logql = Sqrl.render(getTemplateLabels(data), data)
+	return logql;
+  } catch(e) {
+	console.log(e, JSON.stringify(data));
+	return;
+  }
+}
+
+
+const getTemplateLabels = function(data){
+  var template = '';
+  if (!data.name && data.label_matchers[0]){
+      template += '{ '
+      template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
+      template += '{{tag.name}}'
+        template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
+      template += '"{{tag.value}}"{{/each}}{{/if}}}'
+  } else if (data.name && data.label_matchers[0]){
+      template += '{__name__="{{it.name}}"'
+      template += '{{@if(it.label_matchers !== null )}}{{@each(it.label_matchers) => tag}}'
+      template += ', {{tag.name}}'
+        template += '{{ @if(tag.op == "GreaterEqual") }}>={{ #elif(tag.op == "LessEqual") }}<={{ #elif(tag.op === "NotEqual") }}!={{ #elif(tag.op == "Equal") }}={{ #elif(tag.op === "GreaterThan") }}>{{ #elif(tag.op === "LessThan") }}<{{ #else }}={{ /if}}'
+      template += '"{{tag.value}}"{{/each}}{{/if}}}'
+  } else {
+    /* fallback selector */
+    // console.log(JSON.stringify(data));
+    template += '{__name__="{{ it.name }}"}'
+  }
+  return template;
+}
+
 module.exports = {
-    p2l: convert
+    p2l: convert,
+    prom2log: convert,
+    prom2labels: labels
 };

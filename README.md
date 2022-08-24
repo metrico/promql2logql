@@ -8,8 +8,9 @@ PromQL to LogQL template based transpiler for [qryn](https://metrico.in)
 
 ## Usage
 ```
-const { p2l } = require('@qxip/promql2logql');
-const logql = p2l(promql);
+const { prom2log, prom2labels } = require('@qxip/promql2logql');
+const logql = prom2log(promql);
+const labels = prom2labels(promql);
 ```
 
 ## Example
