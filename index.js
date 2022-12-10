@@ -49,7 +49,7 @@ const convert = function(data){
         if(inner){
           logql = `${inner[0]}(${inner[1]}, ${logql})`
         }
-  	if (logql.trim().startsWith('absent_over_time')){
+  	if (logql.trim().startsWith('absent_over_time') || logql.trim().startsWith('count_over_time')){
   	  logql = logql.replace('| unwrap_value ','');
   	}
 	return logql;

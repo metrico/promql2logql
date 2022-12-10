@@ -91,6 +91,13 @@ test('fix: absent_over_time', () => {
   expect(logql).toBe(result)
 });
 
+test('fix: absent_over_time', () => {
+  var promql = 'count_over_time(cpu_percent_value[5s])'
+  var result = 'count_over_time({ __name__="cpu_percent_value"} [5s])'
+  var logql = p2l(promql)
+  expect(logql).toBe(result)
+});
+
 /* Failing */
 
 test('fix: sum test', () => {
