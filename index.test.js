@@ -98,14 +98,14 @@ test('fix: count_over_time', () => {
   expect(logql).toBe(result)
 });
 
-/* Failing */
-
 test('fix: sum test', () => {
   var promql = 'sum(cpu_percent_value)'
   var result = 'sum({ __name__="cpu_percent_value"} | unwrap_value [1m])'
   var logql = p2l(promql)
   expect(logql).toBe(result)
 });
+
+/* Failing */
 
 /*
 test('fix: sum without', () => {
