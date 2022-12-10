@@ -1,16 +1,19 @@
 {
   "name": "@qxip/promql2logql",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Basic PromQL to LogQL transpiler for qryn",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
-  "author": "",
+  "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com>",
   "license": "AGPLv3",
   "dependencies": {
     "@qxip/promql-parser-js": "^0.1.1",
     "jsonic": "^1.0.1",
     "squirrelly": "^8.0.8"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1"
   }
 }

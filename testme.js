@@ -84,6 +84,15 @@ try {
 }
 
 
+var promql_labelsdot = 'something{dot.label="300"}'
+try {
+  var logql = p2l(promql_labelsdot)
+  console.log(logql);
+} catch(e) {
+  console.log('!!!',e);
+}
+
+
 /* labels */
 
 var promql_labels1 = 'something{le="300"}'
@@ -109,3 +118,4 @@ try {
 } catch(e) {
   console.log('!!!',e);
 }
+
