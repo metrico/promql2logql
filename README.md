@@ -1,7 +1,10 @@
 <img src="https://user-images.githubusercontent.com/1423657/183499884-6b73c3c8-9385-401c-91f0-222216a47b4e.png" width=200 />
 
+
 # prom2logql
 PromQL to LogQL template based transpiler for [qryn](https://metrico.in)
+
+[![Node.js CI](https://github.com/lmangani/promql2logql/actions/workflows/test.yml/badge.svg)](https://github.com/lmangani/promql2logql/actions/workflows/test.yml)
 
 ### Status
 * Experimental! Do not use it.
