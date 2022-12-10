@@ -37,7 +37,6 @@ const convert = function(data){
       if (inner[2] && inner[1]){
         data = inner[2];
       }
-      console.log('subquery', inner[2]);
     } catch(e) {
       console.log(e);
       return;
@@ -50,6 +49,9 @@ const convert = function(data){
         if(inner){
           logql = `${inner[0]}(${inner[1]}, ${logql})`
         }
+  	if (logql.trim().startsWith('absent_over_time')){
+  	  logql = logql.replace('| unwrap_value ','');
+  	}
 	return logql;
   } catch(e) {
 	console.log(e, JSON.stringify(data));

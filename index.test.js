@@ -84,7 +84,30 @@ test('labels: any with tags', () => {
   expect(logql).toBe(result)
 });
 
+test('fix: absent_over_time', () => {
+  var promql = 'absent_over_time(cpu_percent_value [5s])'
+  var result = 'absent_over_time({ __name__="cpu_percent_value"} [5s])'
+  var logql = p2l(promql)
+  expect(logql).toBe(result)
+});
+
 /* Failing */
+
+test('fix: sum test', () => {
+  var promql = 'sum(cpu_percent_value)'
+  var result = 'sum({ __name__="cpu_percent_value"} | unwrap_value [1m])'
+  var logql = p2l(promql)
+  expect(logql).toBe(result)
+});
+
+/*
+test('fix: sum without', () => {
+  var promql = 'sum without (http) (cpu_percent_value)'
+  var result = ''
+  var logql = p2l(promql)
+  expect(logql).toBe(result)
+});
+*/
 
 
 /* Dummy Ending */
@@ -94,3 +117,4 @@ test('test', () => {
   var result = 'x'
   expect(test).toBe(result)
 });
+
