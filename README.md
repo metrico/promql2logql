@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/1423657/183499884-6b73c3c8-9385-401c-91f0-222216a47b4e.png" width=200 />
+<img src="https://user-images.githubusercontent.com/1423657/218816262-e0e8d7ad-44d0-4a7d-9497-0d383ed78b83.png" width=200 />
 
 
 # prom2logql
