@@ -23,7 +23,7 @@ test('rate not', () => {
 
 test('basic', () => {
   var promql = 'just_some_name{}'
-  var result = 'rate({__name__="just_some_name"} | unwrap_value [1m])'
+  var result = 'first_over_time({__name__="just_some_name"} | unwrap_value [1m])'
   var logql = p2l(promql)
   expect(logql).toBe(result)
 });
