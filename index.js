@@ -114,7 +114,7 @@ const getTemplate = function(data){
   } else {
     /* fallback selector */
     // console.log(JSON.stringify(data));
-    template += 'rate({__name__="{{ it.name }}"} | unwrap_value [1m])'
+    template += 'first_over_time({__name__="{{ it.name }}"} | unwrap_value [1m])'
   }
   return template;
 }
